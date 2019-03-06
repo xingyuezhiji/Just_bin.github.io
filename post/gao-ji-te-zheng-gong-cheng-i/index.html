@@ -1,94 +1,73 @@
-
-<!DOCTYPE html>
 <html>
   <head>
-    
-<meta charset="utf-8" >
-
+    <meta charset="utf-8" />
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>高级特征工程I | Justbin&#39;s Blog</title>
-<meta name="description" content="温故而知新">
-
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
-
 <link rel="shortcut icon" href="https://xingyuezhiji.github.io//favicon.ico">
 <link rel="stylesheet" href="https://xingyuezhiji.github.io//styles/main.css">
 
-
-  
-    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
-  
-
-  
-
-
-<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdn.bootcss.com/moment.js/2.23.0/moment.min.js"></script>
 
 
   </head>
   <body>
-    <div id="app" class="main">
-      <div class="site-header-container">
-  <div class="site-header">
-    <div class="left">
-      <a href="https://xingyuezhiji.github.io/">
-        <img class="avatar" src="https://xingyuezhiji.github.io//images/avatar.png" alt="" width="32px" height="32px">
-      </a>
-      <a href="https://xingyuezhiji.github.io/">
-        <h1 class="site-title">Justbin&#39;s Blog</h1>
-      </a>
-    </div>
-    <div class="right">
-      <transition name="fade">
-        <i class="icon" :class="{ 'icon-close-outline': menuVisible, 'icon-menu-outline': !menuVisible }" @click="menuVisible = !menuVisible"></i>
-      </transition>
-    </div>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://xingyuezhiji.github.io/">
+  <img class="avatar" src="https://xingyuezhiji.github.io//images/avatar.png" alt="" width="80px" height="80px">
+  </a>
+  <h1 class="site-title">
+    Justbin&#39;s Blog
+  </h1>
+  <p class="site-description">
+    温故而知新
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
   </div>
 </div>
 
-<transition name="fade">
-  <div class="menu-container" style="display: none;" v-show="menuVisible">
-    <div class="menu-list">
       
-        
-          <a href="/" class="menu purple-link">
-            首页
-          </a>
-        
-      
-        
-          <a href="/archives" class="menu purple-link">
-            归档
-          </a>
-        
-      
-        
-          <a href="/tags" class="menu purple-link">
-            标签
-          </a>
-        
-      
-        
-          <a href="/post/about" class="menu purple-link">
-            关于
-          </a>
-        
-      
-    </div>
-  </div>
-</transition>
-
-
-      <div class="content-container">
         <div class="post-detail">
-          <h2 class="post-title">高级特征工程I</h2>
-          <div class="post-info post-detail-info">
-            <span><i class="icon-calendar-outline"></i> 2019-03-06</span>
-            
-          </div>
-          <div class="post-content">
-            <p>高级特征工程I﻿<br>Mean encodings<br>以下是Coursera上的How to Win a Data Science Competition: Learn from Top Kagglers课程笔记。<br>学习目标</p>
+          <article class="post">
+            <h2 class="post-title">
+              高级特征工程I
+            </h2>
+            <div class="post-info">
+              <time class="post-time">
+                · 2019-03-06 ·
+              </time>
+              
+            </div>
+            <div class="post-content">
+              <p>高级特征工程I﻿<br>Mean encodings<br>以下是Coursera上的How to Win a Data Science Competition: Learn from Top Kagglers课程笔记。<br>学习目标</p>
 <p>Regularize mean encodings<br>Extend mean encodings<br>Summarize the concept of mean encodings<br>Concept of mean encoding<br>均值编码是一种非常强大的技术，它有很多名字，例如:likelihood encoding、target encoding，但这里我们叫它均值编码。我们举一个二分类任务的例子。<br>     feature    feature_label    feature_mean    target<br>0    Moscow    1    0.4    0<br>1    Moscow    1    0.4    1<br>2    Moscow    1    0.4    1<br>3    Moscow    1    0.4    0<br>4    Moscow    1    0.4    0<br>5    Tver    2    0.8    1<br>6    Tver    2    0.8    1<br>7    Tver    2    0.8    1<br>8    Tver    2    0.8    0<br>9    Klin    0    0.0    0<br>10    klin    0    0.0    0<br>11    Tver    2    1    1<br>我们想对feature变量进行编码，最直接、常用的方式就是label encoding，这就是第二列数据。</p>
 <p>平均编码以不同的方式去完成这个任务，它用每个城市自身对应的目标均值来进行编码。例如，对于Moscow，我们有五行，三个0和两个1。 所以我们用2除以5或0.4对它进行编码。用同样的方法处理其他城市。<br>现在了解一下细节。当我们的数据集非常大，包含数百个不同的城市，让我们试着比较一下。我们绘制了0,1 class的直方图。<br>label_encoding.jpg<br>在label encoding的情况下，我们得到的图看起来没有任何逻辑顺序。<br>mean_encoding.jpg<br>但是当我们使用mean encoding对目标进行编码时，类看起来更加可分了，像是被排序过。<br>一般来说，模型对复杂、非线性的特征目标越依赖，均值编码越有效。例如树模型的深度有限，可以用平均编码来补偿它，可以用它的短板来获得更好的分数。<br>以上只是一个例子，传递的是一种思想，实际上可以做很多类似的操作。<br>Ways to use target variable</p>
 <p>Goods-number of ones in a group,</p>
@@ -112,73 +91,58 @@
 <p>例如，如果我们发现feature1和feature2这一对特征最常见，我们可以在数据中连接这些特征，这意味编码产生交互。<br>Correct validation reminder</p>
 <p>Local experiments:<br>Estimate encodings on X_tr<br>Map them to X_tr and X_val<br>Regularize on X_tr<br>Validate model on X_tr/X_val split<br>Submission:<br>Estimate encodings on whole Train data<br>Map them on Train and Test<br>Regularize on Train<br>Fit on Train<br>reminder_set.png<br>End<br>Main advantages:<br>Compact transformation of categorical variables<br>Powerful basis for feature engineering<br>Disadvantages:<br>Need careful validation, there a lot of ways to overfit<br>Significant improvements only on specific datasets</p>
 
-          </div>
+            </div>
+          </article>
         </div>
-
+    
         
           <div class="next-post">
-            <a class="purple-link" href="https://xingyuezhiji.github.io//post/hello-hve-notes">
+            <div class="next">下一篇</div>
+            <a href="https://xingyuezhiji.github.io//post/hello-hve-notes">
               <h3 class="post-title">
-                下一篇：Hello Hve Notes
+                Hello Hve Notes
               </h3>
             </a>
-          </div>
+          </div>  
+        
+
+        
           
-      </div>
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
 
-      
-        
-          <div id="gitalk-container"></div>
-        
+<div id="gitalk-container"></div>
 
-        
-      
+<script>
 
-      <div class="site-footer">
-  <div class="slogan">温故而知新</div>
-  Powered by Hve Notes
-</div>
+  var gitalk = new Gitalk({
+    clientID: '44f9148d915d95088f83',
+    clientSecret: '87a81eeeca666a1ff783f1607a716c9aa3147521',
+    repo: 'xingyuezhiji.github.io',
+    owner: 'xingyuezhiji',
+    admin: ['xingyuezhiji'],
+    id: location.pathname,      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
 
-
-    </div>
-    <script type="application/javascript">
-
-hljs.initHighlightingOnLoad()
-
-var app = new Vue({
-  el: '#app',
-  data: {
-    menuVisible: false,
-  },
-})
+  gitalk.render('gitalk-container')
 
 </script>
 
+          
 
-  
-  
-    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
-    <script>
+          
+        
+    
+        <div class="site-footer">
+  Powered by Hve Notes
+</div>
 
-      var gitalk = new Gitalk({
-        clientID: '44f9148d915d95088f83',
-        clientSecret: '87a81eeeca666a1ff783f1607a716c9aa3147521',
-        repo: 'xingyuezhiji.github.io',
-        owner: 'xingyuezhiji',
-        admin: ['xingyuezhiji'],
-        id: location.pathname,      // Ensure uniqueness and length less than 50
-        distractionFreeMode: false  // Facebook-like distraction free mode
-      })
+<script>
+  hljs.initHighlightingOnLoad()
+</script>
 
-      gitalk.render('gitalk-container')
-
-    </script>
-  
-
-  
-
-
-
-
+      </div>
+    </div>
   </body>
 </html>
