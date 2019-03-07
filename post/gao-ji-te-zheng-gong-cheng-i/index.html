@@ -1,93 +1,71 @@
-<!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8" >
-
+    <meta charset="utf-8" />
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>高级特征工程I | Justbin&#39;s Blog</title>
-<meta name="description" content="Love Life!">
-
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-
 <link rel="shortcut icon" href="https://xingyuezhiji.github.io//favicon.ico">
 <link rel="stylesheet" href="https://xingyuezhiji.github.io//styles/main.css">
 
-
-  
-    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
-  
-
-  
-
-
-<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
-
-<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.bootcss.com/moment.js/2.23.0/moment.min.js"></script>
 
 
   </head>
   <body>
-    <div id="app" class="main">
-
-      <div class="sidebar" :class="{ 'full-height': menuVisible }">
-  <div class="top-container" data-aos="fade-right">
-    <div class="top-header-container">
-      <a class="site-title-container" href="https://xingyuezhiji.github.io/">
-        <img src="https://xingyuezhiji.github.io//images/avatar.png" class="site-logo">
-        <h1 class="site-title">Justbin&#39;s Blog</h1>
-      </a>
-      <div class="menu-btn" @click="menuVisible = !menuVisible">
-        <div class="line"></div>
-      </div>
-    </div>
-    <div>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://xingyuezhiji.github.io/">
+  <img class="avatar" src="https://xingyuezhiji.github.io//images/avatar.png" alt="" width="80px" height="80px">
+  </a>
+  <h1 class="site-title">
+    Justbin&#39;s Blog
+  </h1>
+  <p class="site-description">
+    Love Life!
+  </p>
+  <div class="menu-container">
+    
       
-        
-          <a href="/" class="site-nav">
-            首页
-          </a>
-        
+        <a href="/" class="menu">
+          首页
+        </a>
       
-        
-          <a href="/archives" class="site-nav">
-            归档
-          </a>
-        
+    
       
-        
-          <a href="/tags" class="site-nav">
-            标签
-          </a>
-        
+        <a href="/archives" class="menu">
+          归档
+        </a>
       
-        
-          <a href="/post/about" class="site-nav">
-            关于
-          </a>
-        
+    
       
-    </div>
-  </div>
-  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
-    <div class="site-description">
-      Love Life!
-    </div>
-    <div class="site-footer">
-      Powered by Hve Notes
-    </div>
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
   </div>
 </div>
 
-
-      <div class="main-container">
-        <div class="content-container" data-aos="fade-up">
-          <div class="post-detail">
-            <h2 class="post-title">高级特征工程I</h2>
-            <div class="post-date">2019-03-06</div>
-            
-              <div class="feature-container" style="background-image: url('https://xingyuezhiji.github.io//post-images/gao-ji-te-zheng-gong-cheng-i.jpg')">
-              </div>
-            
+      
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              高级特征工程I
+            </h2>
+            <div class="post-info">
+              <time class="post-time">
+                · 2019-03-06 ·
+              </time>
+              
+            </div>
             <div class="post-content">
               <p>高级特征工程I﻿<br>Mean encodings<br>以下是Coursera上的How to Win a Data Science Competition: Learn from Top Kagglers课程笔记。<br>学习目标</p>
 <p>Regularize mean encodings<br>Extend mean encodings<br>Summarize the concept of mean encodings<br>Concept of mean encoding<br>均值编码是一种非常强大的技术，它有很多名字，例如:likelihood encoding、target encoding，但这里我们叫它均值编码。我们举一个二分类任务的例子。<br>     feature    feature_label    feature_mean    target<br>0    Moscow    1    0.4    0<br>1    Moscow    1    0.4    1<br>2    Moscow    1    0.4    1<br>3    Moscow    1    0.4    0<br>4    Moscow    1    0.4    0<br>5    Tver    2    0.8    1<br>6    Tver    2    0.8    1<br>7    Tver    2    0.8    1<br>8    Tver    2    0.8    0<br>9    Klin    0    0.0    0<br>10    klin    0    0.0    0<br>11    Tver    2    1    1<br>我们想对feature变量进行编码，最直接、常用的方式就是label encoding，这就是第二列数据。</p>
@@ -114,74 +92,57 @@
 <p>Local experiments:<br>Estimate encodings on X_tr<br>Map them to X_tr and X_val<br>Regularize on X_tr<br>Validate model on X_tr/X_val split<br>Submission:<br>Estimate encodings on whole Train data<br>Map them on Train and Test<br>Regularize on Train<br>Fit on Train<br>reminder_set.png<br>End<br>Main advantages:<br>Compact transformation of categorical variables<br>Powerful basis for feature engineering<br>Disadvantages:<br>Need careful validation, there a lot of ways to overfit<br>Significant improvements only on specific datasets</p>
 
             </div>
-            
-            
-              <div class="next-post">
-                <div class="next">下一篇</div>
-                <a href="https://xingyuezhiji.github.io//post/hello-hve-notes">
-                  <h3 class="post-title">
-                    Hello Hve Notes
-                  </h3>
-                </a>
-              </div>
-            
-
-            
-              
-                <div id="gitalk-container" data-aos="fade-in"></div>
-              
-
-              
-            
-
-          </div>
-
+          </article>
         </div>
-      </div>
-    </div>
+    
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://xingyuezhiji.github.io//post/hello-hve-notes">
+              <h3 class="post-title">
+                Hello Hve Notes
+              </h3>
+            </a>
+          </div>  
+        
 
-    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+        
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
 
-<script type="application/javascript">
+<div id="gitalk-container"></div>
 
-AOS.init();
+<script>
 
-hljs.initHighlightingOnLoad()
+  var gitalk = new Gitalk({
+    clientID: '44f9148d915d95088f83',
+    clientSecret: '87a81eeeca666a1ff783f1607a716c9aa3147521',
+    repo: 'xingyuezhiji.github.io',
+    owner: 'xingyuezhiji',
+    admin: ['xingyuezhiji'],
+    id: location.pathname,      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
 
-var app = new Vue({
-  el: '#app',
-  data: {
-    menuVisible: false,
-  },
-})
+  gitalk.render('gitalk-container')
 
 </script>
 
+          
 
-  
-  
-    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
-    <script>
+          
+        
+    
+        <div class="site-footer">
+  Powered by Hve Notes
+</div>
 
-      var gitalk = new Gitalk({
-        clientID: '44f9148d915d95088f83',
-        clientSecret: '87a81eeeca666a1ff783f1607a716c9aa3147521',
-        repo: 'xingyuezhiji.github.io',
-        owner: 'xingyuezhiji',
-        admin: ['xingyuezhiji'],
-        id: location.pathname,      // Ensure uniqueness and length less than 50
-        distractionFreeMode: false  // Facebook-like distraction free mode
-      })
+<script>
+  hljs.initHighlightingOnLoad()
+</script>
 
-      gitalk.render('gitalk-container')
-
-    </script>
-  
-
-  
-
-
-
-
+      </div>
+    </div>
   </body>
 </html>
