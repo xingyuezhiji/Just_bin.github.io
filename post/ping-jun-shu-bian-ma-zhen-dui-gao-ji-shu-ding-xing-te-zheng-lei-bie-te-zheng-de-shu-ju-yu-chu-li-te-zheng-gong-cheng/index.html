@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>平均数编码：针对高基数定性特征（类别特征）的数据预处理/特征工程 | Just_bin&#39;s Blog</title>
+<meta name="description" content="Love Life!">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="shortcut icon" href="https://xingyuezhiji.github.io//favicon.ico">
+<link rel="stylesheet" href="https://xingyuezhiji.github.io//styles/main.css">
+
+
+  
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+  
+
+  
+
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://xingyuezhiji.github.io/">
+        <img src="https://xingyuezhiji.github.io//images/avatar.png" class="site-logo">
+        <h1 class="site-title">Just_bin&#39;s Blog</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="site-description">
+      Love Life!
+    </div>
+    <div class="site-footer">
+      Powered by Hve Notes
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">平均数编码：针对高基数定性特征（类别特征）的数据预处理/特征工程</h2>
+            <div class="post-date">2019-03-14</div>
+            
+              <div class="feature-container" style="background-image: url('https://xingyuezhiji.github.io//post-images/ping-jun-shu-bian-ma-zhen-dui-gao-ji-shu-ding-xing-te-zheng-lei-bie-te-zheng-de-shu-ju-yu-chu-li-te-zheng-gong-cheng.webp')">
+              </div>
+            
+            <div class="post-content">
+              <p>平均数编码：针对高基数定性特征（类别特征）的数据预处理/特征工程<br>光喻<br>光喻<br>机器学习/因果推断<br>​关注他<br>鱼遇雨欲语与余<br>等 182 人赞同了该文章<br>（在另一篇文章中，我正在汇总所有已知的数据挖掘特征工程技巧：【持续更新】机器学习特征工程实用技巧大全 - 知乎专栏。）</p>
+<p>前言</p>
+<p>读完sklearn.preprocessing所有函数的API文档之后，基础的特征工程就可以算是入门了。然而，进阶的特征工程往往依赖于数据分析师的直觉与经验，而且与具体的数据有密切的联系，比较难找到系统性的“最好”的特征工程方法。</p>
+<p>在这里，我希望能向大家分享一种极其有效的、针对高基数定性特征（类别特征）的数据预处理方法。在各类竞赛中，有许多人使用这种方法取得了非常优秀的成绩，但是中文网络上似乎还没有人对此做过介绍。</p>
+<p>平均数编码：针对高基数定性特征（类别特征）的数据预处理<br>Mean Encoding: A Preprocessing Scheme for High-Cardinality Categorical Features<br>（论文原文下载：<a href="http://helios.mm.di.uoa.gr/~rouvas/ssi/sigkdd/sigkdd.vol3.1/barreca.pdf%EF%BC%8C%E6%84%9F%E8%B0%A2%E8%AF%84%E8%AE%BA%E5%8C%BA@jin">http://helios.mm.di.uoa.gr/~rouvas/ssi/sigkdd/sigkdd.vol3.1/barreca.pdf，感谢评论区@jin</a> zhang提供更清晰的pdf版本）</p>
+<p>如果某一个特征是定性的（categorical），而这个特征的可能值非常多（高基数），那么平均数编码（mean encoding）是一种高效的编码方式。在实际应用中，这类特征工程能极大提升模型的性能。</p>
+<p>在机器学习与数据挖掘中，不论是分类问题（classification）还是回归问题（regression），采集的数据常常会包括定性特征（categorical feature）。因为定性特征表示某个数据属于一个特定的类别，所以在数值上，定性特征值通常是从0到n的离散整数。例子：花瓣的颜色（红、黄、蓝）、性别（男、女）、地址、某一列特征是否存在缺失值（这种NA 指示列常常会提供有效的额外信息）。</p>
+<p>一般情况下，针对定性特征，我们只需要使用sklearn的OneHotEncoder或LabelEncoder进行编码：（data_df是一个pandas dataframe，每一行是一个training example，每一列是一个特征。在这里我们假设&quot;street_address&quot;是一个字符类的定性特征。）</p>
+<p>from sklearn.preprocessing import OneHotEncoder, LabelEncoder<br>import numpy as np<br>import pandas as pd</p>
+<p>le = LabelEncoder()<br>data_df[&#39;street_address&#39;] = le.fit_transform(data_df[&#39;street_address&#39;])</p>
+<p>ohe = OneHotEncoder(n_values=&#39;auto&#39;, categorical_features=&#39;all&#39;, dtype=np.float64, sparse=True, handle_unknown=&#39;error&#39;)<br>one_hot_matrix = ohe.fit_transform(data_df[&#39;street_address&#39;])<br>LabelEncoder能够接收不规则的特征列，并将其转化为从0到n-1的整数值（假设一共有n种不同的类别）；OneHotEncoder则能通过哑编码，制作出一个m*n的稀疏矩阵（假设数据一共有m行，具体的输出矩阵格式是否稀疏可以由sparse参数控制）。</p>
+<p>更详细的API文档参见：sklearn.preprocessing.LabelEncoder - scikit-learn 0.18.1 documentation以及sklearn.preprocessing.OneHotEncoder - scikit-learn 0.18.1 documentation</p>
+<p>这类简单的预处理能够满足大多数数据挖掘算法的需求。</p>
+<p>值得一提的是，LabelEncoder将n种类别编码为从0到n-1的整数，虽然能够节省内存和降低算法的运行时间，但是隐含了一个假设：不同的类别之间，存在一种顺序关系。在具体的代码实现里，LabelEncoder会对定性特征列中的所有独特数据进行一次排序，从而得出从原始输入到整数的映射。</p>
+<p>定性特征的基数（cardinality）指的是这个定性特征所有可能的不同值的数量。在高基数（high cardinality）的定性特征面前，这些数据预处理的方法往往得不到令人满意的结果。</p>
+<p>高基数定性特征的例子：IP地址、电子邮件域名、城市名、家庭住址、街道、产品号码。</p>
+<p>主要原因：</p>
+<p>LabelEncoder编码高基数定性特征，虽然只需要一列，但是每个自然数都具有不同的重要意义，对于y而言线性不可分。使用简单模型，容易欠拟合（underfit），无法完全捕获不同类别之间的区别；使用复杂模型，容易在其他地方过拟合（overfit）。<br>OneHotEncoder编码高基数定性特征，必然产生上万列的稀疏矩阵，易消耗大量内存和训练时间，除非算法本身有相关优化（例：SVM）。</p>
+<p>因此，我们可以尝试使用平均数编码（mean encoding）的编码方法，在贝叶斯的架构下，利用所要预测的应变量（target variable），有监督地确定最适合这个定性特征的编码方式。在Kaggle的数据竞赛中，这也是一种常见的提高分数的手段。</p>
+<p>基本思路与原理：</p>
+<p>平均数编码是一种有监督（supervised）的编码方式，适用于分类和回归问题。为了简化讨论，以下的所有代码都以分类问题作为例子。</p>
+<p>假设在分类问题中，目标y一共有C个不同类别，具体的一个类别用target表示；某一个定性特征variable一共有K个不同类别，具体的一个类别用k表示。</p>
+<p>先验概率（prior）：数据点属于某一个target（y）的概率，P(y = target)</p>
+<p>后验概率（posterior）：该定性特征属于某一类时，数据点属于某一个target（y）的概率，P(target = y | variable = k)</p>
+<p>本算法的基本思想：将variable中的每一个k，都表示为（估算的）它所对应的目标y值概率：</p>
+<p>\hat{P} (target = y | variable = k)。（估算的结果都用“^”表示，以示区分）<br>（备注）因此，整个数据集将增加（C-1）列。是C-1而不是C的原因：<br>\sum_{i}^{}{\hat{P}(target = y_i | variable = k)} =1，所以最后一个y_i的概率值必然和其他y_i的概率值线性相关。在线性模型、神经网络以及SVM里，不能加入线性相关的特征列。如果你使用的是基于决策树的模型（gbdt、rf等），个人仍然不推荐这种over-parameterization。</p>
+<p>先验概率与后验概率的计算：</p>
+<p>因为我们没有上帝视角，所以我们在计算中，需要利用已有数据估算先验概率和后验概率。我们在此使用的具体方法被称为Empirical Bayes（Empirical Bayes method）。和一般的贝叶斯方法（如常见的Laplace Smoothing）不同，我们在估算先验概率时，会使用已知数据的平均值，而不是\frac{1}{C} 。</p>
+<p>接下来的计算就是简单的统计：</p>
+<p>\hat{P}(y = target) = (y = target)的数量 / y 的总数</p>
+<p>\hat{P}(target = y | variable = k) = (y = target 并且 variable = k)的数量 / (variable = k)的数量</p>
+<p>（其实我本来可以把公式用sigma求和写出来的，但是那样不太方便直观理解）</p>
+<p>使用不同的统计方法，以上两个公式的计算方法也会不同。<br>权重：</p>
+<p>我们已经得到了先验概率估计\hat{P}(y = target)和后验概率估计\hat{P}(target = y | variable = k)。最终编码所使用的概率估算，应当是先验概率与后验概率的一个凸组合（convex combination）。由此，我们引入先验概率的权重\lambda 来计算编码所用概率\hat{P}：</p>
+<p>\hat{P} = \lambda * \hat{P}(y = target) + (1 - \lambda) * \hat{P}(target = y | variable = k)<br>或：\hat{P} = \lambda * prior + (1 - \lambda) * posterior</p>
+<p>直觉上，\lambda 应该具有以下特性：</p>
+<p>如果测试集中出现了新的特征类别（未在训练集中出现），那么\lambda = 1。<br>一个特征类别在训练集内出现的次数越多，后验概率的可信度越高，其权重也越大。</p>
+<p>在贝叶斯统计学中，\lambda 也被称为shrinkage parameter。<br>权重函数：</p>
+<p>我们需要定义一个权重函数，输入是特征类别在训练集中出现的次数n，输出是对于这个特征类别的先验概率的权重\lambda。假设一个特征类别的出现次数为n，以下是一个常见的权重函数：</p>
+<p>\lambda(n) = \frac{1}{1 + e^{(n - k)/f}} </p>
+<p>这个函数有两个参数：<br>k：当n = k时，\lambda = 0.5，先验概率与后验概率的权重相同；当n &gt; k时，\lambda &lt; 0.5。</p>
+<p>f：控制函数在拐点附近的斜率，f越大，“坡”越缓。</p>
+<p>图示：k=1时，不同的f对于函数图象的影响。</p>
+<p>当(freq_col - k) / f太大的时候，np.exp可能会产生overflow的警告。我们不需要管这个警告，因为某一类别的频数极高，分母无限时，最终先验概率的权重将成为0，这也表示我们对于后验概率有充足的信任。</p>
+<p>延伸</p>
+<p>以上的算法设计能解决多个（&gt;2）类别的分类问题，自然也能解决更简单的2类分类问题以及回归问题。</p>
+<p>还有一种情况：定性特征本身包括了不同级别。例如，国家包含了省，省包含了市，市包含了街区。有些街区可能就包含了大量的数据点，而有些省却可能只有稀少的几个数据点。这时，我们的解决方法是，在empirical bayes里加入不同层次的先验概率估计。</p>
+<p>代码实现</p>
+<p>原论文并没有提到，如果fit时使用了全部的数据，transform时也使用了全部数据，那么之后的机器学习模型会产生过拟合。因此，我们需要将数据分层分为n_splits个fold，每一个fold的数据都是利用剩下的(n_splits - 1)个fold得出的统计数据进行转换。n_splits越大，编码的精度越高，但也更消耗内存和运算时间。</p>
+<p>编码完毕后，是否删除原始特征列，应当具体问题具体分析。</p>
+<p>附：完整版MeanEncoder代码（python）。</p>
+<p>一个MeanEncoder对象可以提供fit_transform和transform方法，不支持fit方法，暂不支持训练时的sample_weight参数。</p>
+<p>import numpy as np<br>import pandas as pd<br>from sklearn.model_selection import StratifiedKFold<br>from itertools import product</p>
+<p>class MeanEncoder:<br>    def <strong>init</strong>(self, categorical_features, n_splits=5, target_type=&#39;classification&#39;, prior_weight_func=None):<br>        &quot;&quot;&quot;<br>        :param categorical_features: list of str, the name of the categorical columns to encode</p>
+<pre><code>    :param n_splits: the number of splits used in mean encoding
+
+    :param target_type: str, &#39;regression&#39; or &#39;classification&#39;
+
+    :param prior_weight_func:
+    a function that takes in the number of observations, and outputs prior weight
+    when a dict is passed, the default exponential decay function will be used:
+    k: the number of observations needed for the posterior to be weighted equally as the prior
+    f: larger f --&gt; smaller slope
+    &quot;&quot;&quot;
+
+    self.categorical_features = categorical_features
+    self.n_splits = n_splits
+    self.learned_stats = {}
+
+    if target_type == &#39;classification&#39;:
+        self.target_type = target_type
+        self.target_values = []
+    else:
+        self.target_type = &#39;regression&#39;
+        self.target_values = None
+
+    if isinstance(prior_weight_func, dict):
+        self.prior_weight_func = eval(&#39;lambda x: 1 / (1 + np.exp((x - k) / f))&#39;, dict(prior_weight_func, np=np))
+    elif callable(prior_weight_func):
+        self.prior_weight_func = prior_weight_func
+    else:
+        self.prior_weight_func = lambda x: 1 / (1 + np.exp((x - 2) / 1))
+
+@staticmethod
+def mean_encode_subroutine(X_train, y_train, X_test, variable, target, prior_weight_func):
+    X_train = X_train[[variable]].copy()
+    X_test = X_test[[variable]].copy()
+
+    if target is not None:
+        nf_name = &#39;{}_pred_{}&#39;.format(variable, target)
+        X_train[&#39;pred_temp&#39;] = (y_train == target).astype(int)  # classification
+    else:
+        nf_name = &#39;{}_pred&#39;.format(variable)
+        X_train[&#39;pred_temp&#39;] = y_train  # regression
+    prior = X_train[&#39;pred_temp&#39;].mean()
+
+    col_avg_y = X_train.groupby(by=variable, axis=0)[&#39;pred_temp&#39;].agg({&#39;mean&#39;: &#39;mean&#39;, &#39;beta&#39;: &#39;size&#39;})
+    col_avg_y[&#39;beta&#39;] = prior_weight_func(col_avg_y[&#39;beta&#39;])
+    col_avg_y[nf_name] = col_avg_y[&#39;beta&#39;] * prior + (1 - col_avg_y[&#39;beta&#39;]) * col_avg_y[&#39;mean&#39;]
+    col_avg_y.drop([&#39;beta&#39;, &#39;mean&#39;], axis=1, inplace=True)
+
+    nf_train = X_train.join(col_avg_y, on=variable)[nf_name].values
+    nf_test = X_test.join(col_avg_y, on=variable).fillna(prior, inplace=False)[nf_name].values
+
+    return nf_train, nf_test, prior, col_avg_y
+
+def fit_transform(self, X, y):
+    &quot;&quot;&quot;
+    :param X: pandas DataFrame, n_samples * n_features
+    :param y: pandas Series or numpy array, n_samples
+    :return X_new: the transformed pandas DataFrame containing mean-encoded categorical features
+    &quot;&quot;&quot;
+    X_new = X.copy()
+    if self.target_type == &#39;classification&#39;:
+        skf = StratifiedKFold(self.n_splits)
+    else:
+        skf = KFold(self.n_splits)
+
+    if self.target_type == &#39;classification&#39;:
+        self.target_values = sorted(set(y))
+        self.learned_stats = {&#39;{}_pred_{}&#39;.format(variable, target): [] for variable, target in
+                              product(self.categorical_features, self.target_values)}
+        for variable, target in product(self.categorical_features, self.target_values):
+            nf_name = &#39;{}_pred_{}&#39;.format(variable, target)
+            X_new.loc[:, nf_name] = np.nan
+            for large_ind, small_ind in skf.split(y, y):
+                nf_large, nf_small, prior, col_avg_y = MeanEncoder.mean_encode_subroutine(
+                    X_new.iloc[large_ind], y.iloc[large_ind], X_new.iloc[small_ind], variable, target, self.prior_weight_func)
+                X_new.iloc[small_ind, -1] = nf_small
+                self.learned_stats[nf_name].append((prior, col_avg_y))
+    else:
+        self.learned_stats = {&#39;{}_pred&#39;.format(variable): [] for variable in self.categorical_features}
+        for variable in self.categorical_features:
+            nf_name = &#39;{}_pred&#39;.format(variable)
+            X_new.loc[:, nf_name] = np.nan
+            for large_ind, small_ind in skf.split(y, y):
+                nf_large, nf_small, prior, col_avg_y = MeanEncoder.mean_encode_subroutine(
+                    X_new.iloc[large_ind], y.iloc[large_ind], X_new.iloc[small_ind], variable, None, self.prior_weight_func)
+                X_new.iloc[small_ind, -1] = nf_small
+                self.learned_stats[nf_name].append((prior, col_avg_y))
+    return X_new
+
+def transform(self, X):
+    &quot;&quot;&quot;
+    :param X: pandas DataFrame, n_samples * n_features
+    :return X_new: the transformed pandas DataFrame containing mean-encoded categorical features
+    &quot;&quot;&quot;
+    X_new = X.copy()
+
+    if self.target_type == &#39;classification&#39;:
+        for variable, target in product(self.categorical_features, self.target_values):
+            nf_name = &#39;{}_pred_{}&#39;.format(variable, target)
+            X_new[nf_name] = 0
+            for prior, col_avg_y in self.learned_stats[nf_name]:
+                X_new[nf_name] += X_new[[variable]].join(col_avg_y, on=variable).fillna(prior, inplace=False)[
+                    nf_name]
+            X_new[nf_name] /= self.n_splits
+    else:
+        for variable in self.categorical_features:
+            nf_name = &#39;{}_pred&#39;.format(variable)
+            X_new[nf_name] = 0
+            for prior, col_avg_y in self.learned_stats[nf_name]:
+                X_new[nf_name] += X_new[[variable]].join(col_avg_y, on=variable).fillna(prior, inplace=False)[
+                    nf_name]
+            X_new[nf_name] /= self.n_splits
+
+    return X_new</code></pre>
+            </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://xingyuezhiji.github.io//post/gao-ji-te-zheng-gong-cheng-i">
+                  <h3 class="post-title">
+                    高级特征工程I
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+              
+                <div id="gitalk-container" data-aos="fade-in"></div>
+              
+
+              
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+
+<script type="application/javascript">
+
+AOS.init();
+
+hljs.initHighlightingOnLoad()
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+  
+  
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+
+      var gitalk = new Gitalk({
+        clientID: '44f9148d915d95088f83',
+        clientSecret: '87a81eeeca666a1ff783f1607a716c9aa3147521',
+        repo: 'xingyuezhiji.github.io',
+        owner: 'xingyuezhiji',
+        admin: ['xingyuezhiji'],
+        id: location.pathname,      // Ensure uniqueness and length less than 50
+        distractionFreeMode: false  // Facebook-like distraction free mode
+      })
+
+      gitalk.render('gitalk-container')
+
+    </script>
+  
+
+  
+
+
+
+
+  </body>
+</html>
