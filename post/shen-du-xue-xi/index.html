@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>深度学习 | Just_bin&#39;s Blog</title>
+<meta name="description" content="Love Life!">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="shortcut icon" href="https://xingyuezhiji.github.io//favicon.ico">
+<link rel="stylesheet" href="https://xingyuezhiji.github.io//styles/main.css">
+
+
+  
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+  
+
+  
+
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://xingyuezhiji.github.io/">
+        <img src="https://xingyuezhiji.github.io//images/avatar.png" class="site-logo">
+        <h1 class="site-title">Just_bin&#39;s Blog</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="site-description">
+      Love Life!
+    </div>
+    <div class="site-footer">
+      Powered by Hve Notes
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">深度学习</h2>
+            <div class="post-date">2019-06-12</div>
+            
+            <div class="post-content">
+              <p>BatchNormalization的作用</p>
+<p>参考回答：</p>
+<p>神经网络在训练的时候随着网络层数的加深,激活函数的输入值的整体分布逐渐往激活函数的取值区间上下限靠近,从而导致在反向传播时低层的神经网络的梯度消失。而BatchNormalization的作用是通过规范化的手段,将越来越偏的分布拉回到标准化的分布,使得激活函数的输入值落在激活函数对输入比较敏感的区域,从而使梯度变大,加快学习收敛速度,避免梯度消失的问题。</p>
+<p>● 梯度消失
+参考回答：
+在神经网络中，当前面隐藏层的学习速率低于后面隐藏层的学习速率，即随着隐藏层数目的增加，分类准确率反而下降了。这种现象叫做消失的梯度问题。
+● 循环神经网络，为什么好?
+参考回答：
+循环神经网络模型（RNN）是一种节点定向连接成环的人工神经网络，是一种反馈神经网络，RNN利用内部的记忆来处理任意时序的输入序列，并且在其处理单元之间既有内部的反馈连接又有前馈连接，这使得RNN可以更加容易处理不分段的文本等。
+● 什么是Group Convolution
+参考回答：
+若卷积神将网络的上一层有N个卷积核,则对应的通道数也为N。设群数目为M,在进行卷积操作的时候,将通道分成M份,每个group对应N/M个通道,然后每个group卷积完成后输出叠在一起,作为当前层的输出通道。
+● 什么是RNN
+参考回答：
+一个序列当前的输出与前面的输出也有关,在RNN网络结构中中,隐藏层的输入不仅包括输入层的输出还包含上一时刻隐藏层的输出,网络会对之前的信息进行记忆并应用于当前的输入计算中。
+● 训练过程中,若一个模型不收敛,那么是否说明这个模型无效?导致模型不收敛的原因有哪些?
+参考回答：
+并不能说明这个模型无效,导致模型不收敛的原因可能有数据分类的标注不准确,样本的信息量太大导致模型不足以fit整个样本空间。学习率设置的太大容易产生震荡,太小会导致不收敛。可能复杂的分类任务用了简单的模型。数据没有进行归一化的操作。
+● 图像处理中锐化和平滑的操作
+参考回答：
+锐化就是通过增强高频分量来减少图像中的模糊,在增强图像边缘的同时也增加了图像的噪声。
+平滑与锐化相反,过滤掉高频分量,减少图像的噪声是图片变得模糊。</p>
+<p>● VGG使用3<em>3卷积核的优势是什么?
+参考回答：
+2个3</em>3的卷积核串联和5<em>5的卷积核有相同的感知野,前者拥有更少的参数。多个3</em>3的卷积核比一个较大尺寸的卷积核有更多层的非线性函数,增加了非线性表达,使判决函数更具有判决性。
+● Relu比Sigmoid的效果好在哪里?
+参考回答：
+Sigmoid的导数只有在0的附近时有较好的激活性,而在正负饱和区域的梯度趋向于0,从而产生梯度弥散的现象,而relu在大于0的部分梯度为常数,所以不会有梯度弥散现象。Relu的导数计算的更快。Relu在负半区的导数为0,所以神经元激活值为负时,梯度为0,此神经元不参与训练,具有稀疏性。
+● 问题：神经网络中权重共享的是？
+参考回答：
+卷积神经网络、循环神经网络
+解析：通过网络结构直接解释</p>
+<p>● 问题：神经网络激活函数？
+参考回答：
+sigmod、tanh、relu
+解析：需要掌握函数图像，特点，互相比较，优缺点以及改进方法</p>
+<p>● 问题：在深度学习中，通常会finetuning已有的成熟模型，再基于新数据，修改最后几层神经网络权值，为什么？
+参考回答：
+实践中的数据集质量参差不齐，可以使用训练好的网络来进行提取特征。把训练好的网络当做特征提取器。
+● 问题：画GRU结构图
+参考回答：</p>
+<p>GRU有两个门：更新门，输出门
+解析：如果不会画GRU，可以画LSTM或者RNN。再或者可以讲解GRU与其他两个网络的联系和区别。不要直接就说不会。</p>
+<p>● Attention机制的作用
+参考回答：
+减少处理高维输入数据的计算负担,结构化的选取输入的子集,从而降低数据的维度。让系统更加容易的找到输入的数据中与当前输出信息相关的有用信息,从而提高输出的质量。帮助类似于decoder这样的模型框架更好的学到多种内容模态之间的相互关系。
+● Lstm和Gru的原理
+参考回答：
+Lstm由输入门,遗忘门,输出门和一个cell组成。第一步是决定从cell状态中丢弃什么信息,然后在决定有多少新的信息进入到cell状态中,最终基于目前的cell状态决定输出什么样的信息。
+Gru由重置门和跟新门组成,其输入为前一时刻隐藏层的输出和当前的输入,输出为下一时刻隐藏层的信息。重置门用来计算候选隐藏层的输出,其作用是控制保留多少前一时刻的隐藏层。跟新门的作用是控制加入多少候选隐藏层的输出信息,从而得到当前隐藏层的输出。</p>
+<p>● 什么是dropout
+参考回答：
+在神经网络的训练过程中,对于神经单元按一定的概率将其随机从网络中丢弃,从而达到对于每个mini-batch都是在训练不同网络的效果,防止过拟合。
+● LSTM每个门的计算公式
+参考回答：
+遗忘门:
+输入门:</p>
+<p>输出门:</p>
+<p>● DropConnect的原理
+参考回答：
+防止过拟合方法的一种,与dropout不同的是,它不是按概率将隐藏层的节点输出清0,而是对每个节点与之相连的输入权值以一定的概率清0。</p>
+
+            </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://xingyuezhiji.github.io//post/ping-jun-shu-bian-ma-zhen-dui-gao-ji-shu-ding-xing-te-zheng-lei-bie-te-zheng-de-shu-ju-yu-chu-li-te-zheng-gong-cheng">
+                  <h3 class="post-title">
+                    平均数编码：针对高基数定性特征（类别特征）的数据预处理/特征工程
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+              
+                <div id="gitalk-container" data-aos="fade-in"></div>
+              
+
+              
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+
+<script type="application/javascript">
+
+AOS.init();
+
+hljs.initHighlightingOnLoad()
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+  
+  
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+
+      var gitalk = new Gitalk({
+        clientID: '44f9148d915d95088f83',
+        clientSecret: '87a81eeeca666a1ff783f1607a716c9aa3147521',
+        repo: 'xingyuezhiji.github.io',
+        owner: 'xingyuezhiji',
+        admin: ['xingyuezhiji'],
+        id: location.pathname,      // Ensure uniqueness and length less than 50
+        distractionFreeMode: false  // Facebook-like distraction free mode
+      })
+
+      gitalk.render('gitalk-container')
+
+    </script>
+  
+
+  
+
+
+
+
+  </body>
+</html>
